@@ -3,207 +3,244 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>METRO SHOP 24/7</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#101018;color:#fff;font-family:Arial,sans-serif}
-header{text-align:center;padding:28px 15px;background:linear-gradient(135deg,#282044,#111827)}
-header h1{color:#d8b5ff;margin:0;font-size:27px}
-header p{color:#ccc}
-main{max-width:850px;margin:auto;padding:15px}
-h2{color:#e0c4ff}
-nav{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:18px 0}
-nav button,.buy,.checkout,.clear{border:0;border-radius:10px;padding:13px;font-weight:bold;cursor:pointer}
-nav button{background:#292438;color:white}
-nav button.active{background:#8755c7}
-.card{background:#1c1b29;border:1px solid #38334c;border-radius:14px;padding:15px;margin:12px 0}
-.card h3{margin:0 0 8px;color:#e5caff}
-.price{color:#8ee5ae;font-weight:bold;font-size:19px}
-.desc{color:#ccc;line-height:1.5;font-size:14px}
-.buy{background:#8755c7;color:white;width:100%;margin-top:10px}
-.buy:active{background:#6840a0}
-#cart{background:#201d2d;padding:16px;border-radius:14px;margin-top:25px}
-.cartline{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #444}
-.checkout{background:#28a66a;color:white;width:100%;margin-top:12px}
-.clear{background:#494454;color:white;width:100%;margin-top:8px}
-.small{font-size:12px;color:#aaa}
-footer{text-align:center;color:#999;padding:25px}
+header{text-align:center;padding:25px 12px;background:linear-gradient(135deg,#382454,#151522)}
+header h1{color:#e1c3ff;margin:0;font-size:27px}
+header p{color:#ddd}
+main{max-width:760px;margin:auto;padding:15px}
+h2{color:#e2c5ff}
+button{border:0;border-radius:10px;padding:12px;font-weight:bold;cursor:pointer}
+.primary{background:#8755c7;color:white}
+.secondary{background:#302b3d;color:white}
+.card{background:#1d1b29;border:1px solid #393348;border-radius:14px;padding:15px;margin:12px 0}
+.card h3{color:#e7d2ff;margin:0 0 8px}
+.card p{color:#ccc;line-height:1.5}
+.price{color:#8ee5ae!important;font-size:21px;font-weight:bold}
+.wide{width:100%;margin-top:10px}
+.topbtn{margin:5px 4px 12px 0}
+.small{font-size:13px;color:#aaa}
+.itemrow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.itemrow button{flex-shrink:0}
+#cart{background:#211e2e;border-radius:14px;padding:15px;margin-top:22px}
 .hidden{display:none}
+footer{text-align:center;color:#999;padding:25px}
+a{color:#d8b5ff}
 </style>
 </head>
 <body>
 <header>
 <h1>⚡ METRO SHOP 24/7</h1>
 <p>PUBG MOBILE • МАГАЗИН 24/7</p>
-Добро пожаловать! 🤍
+<strong>Добро пожаловать! 🤍</strong>
 </header>
 
 <main>
+<div id="home">
 <h2>🛒 КАТАЛОГ МАГАЗИНА</h2>
-<nav>
-<button class="active" onclick="show('things',this)">🛒 Вещи</button>
-<button onclick="show('escort',this)">🎮 Сопровождение</button>
-<button onclick="show('balance',this)">💰 Буст баланса</button>
-<button onclick="show('tickets',this)">🎫 Буст билетов</button>
-</nav>
+<div id="categories"></div>
+</div>
 
-<section id="things">
-<h2>🤍 Вещи</h2>
-<div id="thingsList"></div>
-</section>
+<div id="categoryPage" class="hidden">
+<button class="secondary topbtn" data-action="home">← Главная</button>
+<h2 id="categoryTitle"></h2>
+<div id="productList"></div>
+</div>
 
-<section id="escort" class="hidden">
-<h2>🎮 Сопровождение</h2>
-<div id="escortList"></div>
-</section>
+<div id="productPage" class="hidden">
+<button class="secondary topbtn" data-action="back-category">← К товарам</button>
+<div id="productDetails"></div>
+</div>
 
-<section id="balance" class="hidden">
-<h2>💰 Буст баланса</h2>
-<div id="balanceList"></div>
-</section>
-
-<section id="tickets" class="hidden">
-<h2>🎫 Буст билетов</h2>
-<div id="ticketsList"></div>
-</section>
-
-<section id="cart">
+<div id="cartPage" class="hidden">
+<button class="secondary topbtn" data-action="home">← В каталог</button>
 <h2>🛒 МОЯ КОРЗИНА</h2>
-<div id="cartItems">Корзина пока пустая</div>
-<p><b>Итого: <span id="total">0</span> ₽</b></p>
-<button class="checkout" onclick="order()">Оформить заказ</button>
-<button class="clear" onclick="clearCart()">Очистить корзину</button>
-<p class="small">Оплата и детали заказа согласовываются с владельцем.</p>
-</section>
+<div id="cartItems"></div>
+<p class="price">Итого: <span id="total">0</span> ₽</p>
+<button class="primary wide" data-action="checkout">Оформить заказ</button>
+<button class="secondary wide" data-action="clear">Очистить корзину</button>
+</div>
 
-<section class="card">
+<div id="cart">
+<div class="itemrow">
+<h2>🛒 Корзина</h2>
+<button class="primary" data-action="cart">Открыть</button>
+</div>
+<p>Товаров в корзине: <b id="cartCount">0</b></p>
+</div>
+
+<div class="card">
 <h2>ℹ️ ИНФОРМАЦИЯ</h2>
 <p>🛒 Поддержка: <a href="https://t.me/Fendigo63">Написать владельцу</a></p>
-<p>📋 Правила магазина: согласуйте условия до заказа.</p>
+<p>📋 Правила: согласуйте условия заказа до оплаты.</p>
 <p>📦 Мои заказы: уточняйте у владельца.</p>
-</section>
+</div>
 </main>
 
 <footer>METRO SHOP 24/7<br>PUBG MOBILE • Все цены в рублях</footer>
 
 <script>
+const categories = [
+{id:"things",name:"🛒 Вещи",description:"Игровые товары PUBG MOBILE"},
+{id:"escort",name:"🎮 Сопровождение",description:"Сопровождение на картах"},
+{id:"balance",name:"💰 Буст баланса",description:"Тарифы игрового баланса"},
+{id:"tickets",name:"🎫 Буст билетов",description:"Тарифы игровых билетов"}
+];
+
 const products = {
-things: [
-["MK14 ВК","15","Высшие обвесы"],
-["MK14 КБ","8","Высшие обвесы"],
-["MK14 СФ","7","Высшие обвесы"],
-["MG3 / P90 ВК","10",""],
-["MG3 / P90 КБ","10",""],
-["MG3 / P90 СФ","10",""],
-["AMR / AWM ВК","25","Высшие обвесы"],
-["AMR / AWM СФ","15","Высшие обвесы"],
-["Обычное — 6 шлем","8",""],
-["Обычное — 6 броня","10","С пластиной"],
-["Обычное — 6 рюкзак","7",""],
-["Кобра — 6 шлем","7",""],
-["Кобра — 6 броня","9","С пластиной"],
-["Кобра — 6 рюкзак","7",""],
-["Стальной фронт — 6 шлем","7",""],
-["Стальной фронт — 6 броня","10","С пластиной"],
-["Стальной фронт — 6 рюкзак","7",""],
-["Тепловизор","10",""],
-["Чёрное письмо","8",""],
-["Рад. пластина","3",""]
+things:[
+["MK14 ВК",15,"Высшие обвесы"],
+["MK14 КБ",8,"Высшие обвесы"],
+["MK14 СФ",7,"Высшие обвесы"],
+["MG3 / P90 ВК",10,""],
+["MG3 / P90 КБ",10,""],
+["MG3 / P90 СФ",10,""],
+["AMR / AWM ВК",25,"Высшие обвесы"],
+["AMR / AWM СФ",15,"Высшие обвесы"],
+["Обычное — 6 шлем",8,""],
+["Обычное — 6 броня",10,"С пластиной"],
+["Обычное — 6 рюкзак",7,""],
+["Кобра — 6 шлем",7,""],
+["Кобра — 6 броня",9,"С пластиной"],
+["Кобра — 6 рюкзак",7,""],
+["Стальной фронт — 6 шлем",7,""],
+["Стальной фронт — 6 броня",10,"С пластиной"],
+["Стальной фронт — 6 рюкзак",7,""],
+["Тепловизор",10,""],
+["Чёрное письмо",8,""],
+["Рад. пластина",3,""]
 ],
-escort: [
-["10 карта — Город тюленей: Конфликт","350","Выдача: шлем, броня, рюкзак, MK14 ВК с высшими обвесами. Вынос от 8М. 3 полных шестых сета гарантированно. Всё с катки."],
-["8 карта — Радейка + вещи","138","Выдача: шлем, броня, рюкзак, MK14 ВК. Вынос от 8М + 3–4 золотых билета. 2 полных шестых сета гарантированно."],
-["7 карта — Радейка + вещи","128","Выдача: шлем, броня, рюкзак, MK14 ВК. Вынос от 7М. 2 полных шестых сета гарантированно."],
-["5 карта — Радейка + вещи","90","Выдача: шлем, броня, рюкзак, MK14 ВК. Вынос от 5М. 2 полных шестых сета гарантированно."]
+escort:[
+["10 карта — Город тюленей: Конфликт",350,
+"Выдача: шлем, броня (ткань, 2 подсумка), рюкзак, MK14 ВК с высшими обвесами. Вынос от 8М. Вещи: 3 полных шестых сета (гарант). Всё с катки."],
+["8 карта — Радейка + вещи",138,
+"Выдача: шлем, броня (ткань, 2 подсумка), рюкзак, MK14 ВК с высшими обвесами. Вынос от 8М + 3–4 золотых билета. Вещи: 2 полных шестых сета (гарант). Всё с катки."],
+["7 карта — Радейка + вещи",128,
+"Выдача: шлем, броня (ткань, 2 подсумка), рюкзак, MK14 ВК с высшими обвесами. Вынос от 7М. Вещи: 2 полных шестых сета (гарант). Всё с катки."],
+["5 карта — Радейка + вещи",90,
+"Выдача: шлем, броня (ткань, 2 подсумка), рюкзак, MK14 ВК с высшими обвесами. Вынос от 5М. Вещи: 2 полных шестых сета (гарант). Всё с катки."]
 ],
-balance: [
-["10 млн баланса","136","Совместная игра с командой на вашем аккаунте."],
-["20 млн баланса","238","Совместная игра с командой на вашем аккаунте."],
-["50 млн баланса","679","Совместная игра с командой на вашем аккаунте."],
-["100 млн баланса","1000","Совместная игра с командой на вашем аккаунте."]
+balance:[
+["10 млн баланса",136,"Совместная игра с командой на вашем аккаунте."],
+["20 млн баланса",238,"Совместная игра с командой на вашем аккаунте."],
+["50 млн баланса",679,"Совместная игра с командой на вашем аккаунте."],
+["100 млн баланса",1000,"Совместная игра с командой на вашем аккаунте."]
 ],
-tickets: [
-["10 🎫","226","Совместная игра с командой на вашем аккаунте."],
-["30 🎫","566","Совместная игра с командой на вашем аккаунте."],
-["50 🎫","667","Совместная игра с командой на вашем аккаунте."],
-["100 🎫","1117","Совместная игра с командой на вашем аккаунте."]
+tickets:[
+["10 🎫",226,"Совместная игра с командой на вашем аккаунте."],
+["30 🎫",566,"Совместная игра с командой на вашем аккаунте."],
+["50 🎫",667,"Совместная игра с командой на вашем аккаунте."],
+["100 🎫",1117,"Совместная игра с командой на вашем аккаунте."]
 ]
 };
 
+let currentCategory="things";
+let currentProduct=null;
 let cart=[];
 
-function show(id,btn){
-document.querySelectorAll("main section").forEach(s=>{
-if(["things","escort","balance","tickets"].includes(s.id))
-s.classList.add("hidden");
+function showPage(page){
+["home","categoryPage","productPage","cartPage"].forEach(id=>{
+document.getElementById(id).classList.toggle("hidden",id!==page);
 });
-document.getElementById(id).classList.remove("hidden");
-document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-btn.classList.add("active");
+document.getElementById("cart").classList.toggle("hidden",page==="cartPage");
 }
 
-function card(item,category){
-return `<div class="card">
-<h3>🛒 ${item[0]}</h3>
-<p class="desc">${item[2]}</p>
-<p class="price">${item[1]} ₽</p>
-<button class="buy" onclick="add('${category}',${products[category].indexOf(item)})">Добавить в корзину</button>
+function renderCategories(){
+document.getElementById("categories").innerHTML=categories.map(c=>`
+<div class="card">
+<h3>${c.name}</h3>
+<p>${c.description}</p>
+<button class="primary wide" data-action="category" data-id="${c.id}">Открыть категорию →</button>
+</div>`).join("");
+}
+
+function openCategory(id){
+currentCategory=id;
+let cat=categories.find(c=>c.id===id);
+document.getElementById("categoryTitle").textContent=cat.name;
+document.getElementById("productList").innerHTML=products[id].map((p,i)=>`
+<div class="card">
+<h3>🛒 ${p[0]}</h3>
+<p class="price">${p[1]} ₽</p>
+<button class="primary wide" data-action="product" data-index="${i}">Подробнее о товаре →</button>
+</div>`).join("");
+showPage("categoryPage");
+}
+
+function openProduct(index){
+currentProduct=products[currentCategory][index];
+document.getElementById("productDetails").innerHTML=`
+<div class="card">
+<h2>${currentProduct[0]}</h2>
+<p class="price">${currentProduct[1]} ₽</p>
+<p>${currentProduct[2] || "Игровой товар PUBG MOBILE."}</p>
+<button class="primary wide" data-action="add">🛒 Добавить в корзину</button>
 </div>`;
+showPage("productPage");
 }
 
-function render(){
-document.getElementById("thingsList").innerHTML=products.things.map(x=>card(x,"things")).join("");
-document.getElementById("escortList").innerHTML=products.escort.map(x=>card(x,"escort")).join("");
-document.getElementById("balanceList").innerHTML=products.balance.map(x=>card(x,"balance")).join("");
-document.getElementById("ticketsList").innerHTML=products.tickets.map(x=>card(x,"tickets")).join("");
-}
-
-function add(category,index){
-cart.push(products[category][index]);
+function addToCart(){
+let found=cart.find(x=>x[0]===currentProduct[0]);
+if(found) found[3]++;
+else cart.push([currentProduct[0],currentProduct[1],currentProduct[2],1]);
 updateCart();
+alert("Товар добавлен в корзину!");
 }
 
 function updateCart(){
+document.getElementById("cartCount").textContent=cart.reduce((s,x)=>s+x[3],0);
+let total=cart.reduce((s,x)=>s+x[1]*x[3],0);
+document.getElementById("total").textContent=total;
 let area=document.getElementById("cartItems");
-if(!cart.length){
-area.textContent="Корзина пока пустая";
-}else{
+if(!cart.length){area.innerHTML="<p>Корзина пока пустая</p>";return;}
 area.innerHTML=cart.map((x,i)=>`
-<div class="cartline">
-<span>${x[0]} — ${x[1]} ₽</span>
-<button onclick="removeItem(${i})">❌</button>
+<div class="card">
+<div class="itemrow"><b>${x[0]}</b><b>${x[1]*x[3]} ₽</b></div>
+<p>Количество: ${x[3]}</p>
+<button class="secondary" data-action="minus" data-index="${i}">−</button>
+<button class="secondary" data-action="plus" data-index="${i}">+</button>
+<button class="secondary" data-action="remove" data-index="${i}">Удалить</button>
 </div>`).join("");
 }
-document.getElementById("total").textContent=
-cart.reduce((sum,x)=>sum+Number(x[1]),0);
+
+function checkout(){
+if(!cart.length){alert("Корзина пустая!");return;}
+let total=cart.reduce((s,x)=>s+x[1]*x[3],0);
+let lines=cart.map(x=>x[0]+" × "+x[3]+" — "+(x[1]*x[3])+" ₽").join("\n");
+let message="Здравствуйте! Заказ METRO SHOP 24/7:\n"+lines+"\nИтого: "+total+" ₽";
+window.location.href="https://t.me/Fendigo63?text="+encodeURIComponent(message);
 }
 
-function removeItem(i){
-cart.splice(i,1);
+document.addEventListener("click",e=>{
+let b=e.target.closest("[data-action]");
+if(!b)return;
+let a=b.dataset.action;
+if(a==="home")showPage("home");
+if(a==="category")openCategory(b.dataset.id);
+if(a==="product")openProduct(Number(b.dataset.index));
+if(a==="back-category")openCategory(currentCategory);
+if(a==="add")addToCart();
+if(a==="cart"){updateCart();showPage("cartPage");}
+if(a==="checkout")checkout();
+if(a==="clear"){cart=[];updateCart();}
+if(a==="remove"){cart.splice(Number(b.dataset.index),1);updateCart();}
+if(a==="plus"){cart[Number(b.dataset.index)][3]++;updateCart();}
+if(a==="minus"){
+let i=Number(b.dataset.index);
+cart[i][3]--;
+if(cart[i][3]<=0)cart.splice(i,1);
 updateCart();
 }
+});
 
-function clearCart(){
-cart=[];
+renderCategories();
 updateCart();
-}
-
-function order(){
-if(!cart.length){
-alert("Сначала добавьте товары в корзину!");
-return;
-}
-let total=cart.reduce((sum,x)=>sum+Number(x[1]),0);
-let message="Здравствуйте! Заказ METRO SHOP 24/7:%0A"+
-cart.map(x=>"- "+x[0]+" — "+x[1]+" ₽").join("%0A")+
-"%0AИтого: "+total+" ₽";
-window.open("https://t.me/Fendigo63?text="+message,"_blank");
-}
-
-render();
 </script>
 </body>
 </html>
+
 
 
