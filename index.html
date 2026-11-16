@@ -1,1 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>METRO SHOP 24/7</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#090b0a;
+ color:white;
+ font-family:Arial,sans-serif;
+}
+header{
+ background:#111713;
+ padding:24px 16px;
+ text-align:center;
+ border-bottom:1px solid #343d32;
+}
+.logo{font-size:29px;font-weight:900;letter-spacing:2px}
+.logo span{color:#b8dc72}
+.sub{color:#a4aa9f;font-size:12px;margin-top:8px}
+main{max-width:650px;margin:auto;padding:18px}
+.welcome{
+ background:linear-gradient(135deg,#1b291c,#111713);
+ border:1px solid #526341;
+ border-radius:15px;
+ padding:22px;
+ margin-bottom:20px;
+}
+.welcome h2{margin:0 0 10px}
+.welcome p{color:#c0c7bb;font-size:14px}
+h3{font-size:18px;margin:24px 0 14px}
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+}
+.item{
+ background:#151a16;
+ border:1px solid #303a30;
+ border-radius:14px;
+ padding:17px 12px;
+ text-align:center;
+}
+.cart-icon{font-size:34px}
+.item h4{margin:12px 0 7px;font-size:16px}
+.item p{font-size:12px;color:#aab1a6;min-height:30px}
+.price{color:#c5e68c;font-weight:bold;margin:12px}
+button{
+ border:0;
+ border-radius:9px;
+ padding:12px;
+ font-weight:bold;
+ cursor:pointer;
+}
+.add{
+ background:#9bc65e;
+ color:#10150d;
+ width:100%;
+}
+.menu{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ background:#171e18;
+ padding:15px;
+ border-radius:12px;
+ margin:10px 0;
+}
+.menu span{color:#c4e68c;font-size:20px}
+.cart{
+ background:#171e18;
+ padding:17px;
+ border-radius:14px;
+ margin-top:25px;
+ border:1px solid #354432;
+}
+.cart-row{
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ margin:12px 0;
+ font-size:14px;
+}
+.total{border-top:1px solid #3a4437;padding-top:13px}
+.checkout{
+ background:#9bc65e;
+ width:100%;
+ margin-top:14px;
+ font-size:15px;
+}
+.clear{
+ background:#333c32;
+ color:white;
+ width:100%;
+ margin-top:8px;
+}
+footer{
+ text-align:center;
+ color:#858d81;
+ font-size:12px;
+ padding:25px;
+}
+</style>
+</head>
+<body>
 
+<header>
+ <div class="logo">⚡ METRO <span>SHOP</span> 24/7</div>
+ <div class="sub">PUBG MOBILE • МАГАЗИН 24/7</div>
+</header>
+
+<main>
+ <section class="welcome">
+  <h2>Добро пожаловать!</h2>
+  <p>Магазин игровых товаров и услуг PUBG MOBILE.</p>
+  <p>Выбирай нужную категорию и добавляй товары в корзину.</p>
+ </section>
+
+ <h3>🛒 КАТАЛОГ МАГАЗИНА</h3>
+
+ <div class="grid">
+  <div class="item">
+   <div class="cart-icon">🛒</div>
+   <h4>Вещи</h4>
+   <p>Игровые товары PUBG MOBILE</p>
+   <div class="price">Цена по запросу</div>
+   <button class="add" onclick="add('Вещи')">В корзину</button>
+  </div>
+
+  <div class="item">
+   <div class="cart-icon">🛒</div>
+   <h4>Сопровождение</h4>
+   <p>Игровые услуги и помощь</p>
+   <div class="price">Цена по запросу</div>
+   <button class="add" onclick="add('Сопровождение')">В корзину</button>
+  </div>
+
+  <div class="item">
+   <div class="cart-icon">🛒</div>
+   <h4>Буст баланса</h4>
+   <p>Услуги с игровым балансом</p>
+   <div class="price">Цена по запросу</div>
+   <button class="add" onclick="add('Буст баланса')">В корзину</button>
+  </div>
+
+  <div class="item">
+   <div class="cart-icon">🛒</div>
+   <h4>Буст билетов</h4>
+   <p>Услуги с игровыми билетами</p>
+   <div class="price">Цена по запросу</div>
+   <button class="add" onclick="add('Буст билетов')">В корзину</button>
+  </div>
+ </div>
+
+ <section class="cart">
+  <h3>🛒 МОЯ КОРЗИНА</h3>
+  <div id="items">Корзина пока пустая</div>
+  <div class="total">
+   <b>Итого: <span id="total">0 ₽</span></b>
+  </div>
+  <button class="checkout" onclick="checkout()">Оформить заказ</button>
+  <button class="clear" onclick="clearCart()">Очистить корзину</button>
+ </section>
+
+ <h3>ИНФОРМАЦИЯ</h3>
+ <div class="menu">🛒 Поддержка <span>›</span></div>
+ <div class="menu">🛒 Правила магазина <span>›</span></div>
+ <div class="menu">🛒 Мои заказы <span>›</span></div>
+
+</main>
+
+<footer>
+ METRO SHOP 24/7<br>
+ PUBG MOBILE • Все цены в рублях
+</footer>
+
+<script>
+let cart=[];
+
+function add(name){
+ cart.push(name);
+ render();
+}
+
+function render(){
+ const box=document.getElementById('items');
+ if(cart.length===0){
+  box.textContent='Корзина пока пустая';
+ }else{
+  box.innerHTML=cart.map((x,i)=>
+   `<div class="cart-row"><span>🛒 ${x}</span><span>${i+1}</span></div>`
+  ).join('');
+ }
+ document.getElementById('total').textContent='По запросу';
+}
+
+function clearCart(){
+ cart=[];
+ render();
+ document.getElementById('total').textContent='0 ₽';
+}
+
+function checkout(){
+ if(cart.length===0){
+  alert('Сначала добавь товар в корзину!');
+  return;
+ }
+ const message='Здравствуйте! Заказ METRO SHOP 24/7:\n'+
+ cart.map(x=>'🛒 '+x).join('\n')+
+ '\nЦена: по запросу';
+ navigator.clipboard.writeText(message).then(()=>{
+  alert('Заказ скопирован! Сейчас откроется Telegram. Вставь сообщение в чат поддержки.');
+  window.open('https://t.me/Fendigo63','_blank');
+ }).catch(()=>{
+  alert(message);
+  window.open('https://t.me/Fendigo63','_blank');
+ });
+}
+</script>
+
+</body>
+</html>
