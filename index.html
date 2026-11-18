@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ru">
 <head>
@@ -70,9 +71,35 @@ function count(){return cart.reduce((n,x)=>n+x.qty,0);}
 function renderCount(){document.getElementById("cartCount").textContent=count();}
 function add(id){let item=cart.find(x=>x.id===id);if(item)item.qty++;else cart.push({id,qty:1});save();renderCount();}
 function renderCart(){const box=document.getElementById("cartItems");if(!cart.length){box.innerHTML='<div class="empty">Корзина пока пустая.</div>';document.getElementById("total").textContent="";renderCount();return;}box.innerHTML=cart.map(x=>{let p=products.find(y=>y.id===x.id);return `<div class="cartrow"><div><b>${escapeHTML(p.name)}</b><small>${money(p.price)} за шт. · ${money(p.price*x.qty)}</small></div><div class="qty"><button data-action="minus" data-id="${p.id}">−</button><b>${x.qty}</b><button data-action="plus" data-id="${p.id}">+</button><button data-action="remove" data-id="${p.id}" aria-label="Удалить">✕</button></div></div>`;}).join("");document.getElementById("total").textContent="Итого: "+money(cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0));renderCount();}
-function checkout(){if(!cart.length){alert("Корзина пустая");return;}const lines=cart.map(x=>{const p=products.find(y=>y.id===x.id);return `${p.name} × ${x.qty} — ${p.price*x.qty} ₽`;});const total=cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0);const msg="Здравствуйте! Хочу оформить заказ в METRO SHOP 24/7:\n\n"+lines.join("\n")+"\n\nИтого: "+total+" ₽";window.open("https://t.me/"+TELEGRAM_USERNAME+"?text="+encodeURIComponent(msg),"_blank");}
+function checkout(){
+if(!cart.length){alert("Корзина пустая");return;}
+const lines=cart.map(x=>{
+const p=products.find(y=>y.id===x.id);
+return `${p.name} × ${x.qty} — ${p.price*x.qty} ₽`;
+});
+const total=cart.reduce((s,x)=>s+products.find(p=>p.id===x.id).price*x.qty,0);
+const msg="Здравствуйте! Хочу оформить заказ в METRO SHOP 24/7:\n\n"+lines.join("\n")+"\n\nИтого: "+total+" ₽";
+const url="https://t.me/"+TELEGRAM_USERNAME+"?text="+encodeURIComponent(msg);
+window.open(url,"_blank");
+}
 function openProduct(id){const p=products.find(x=>x.id===id);document.getElementById("productDetail").innerHTML=`<h2>${escapeHTML(p.name)}</h2><p>${escapeHTML(p.desc||"")}</p><div class="price">${money(p.price)}</div><button class="btn" data-action="add" data-id="${p.id}">Добавить в корзину</button>`;showPage("product");}
-document.addEventListener("click",e=>{const b=e.target.closest("[data-action]");if(!b)return;const a=b.dataset.action,id=Number(b.dataset.id);if(a==="home")showPage("home");if(a==="cart"){renderCart();showPage("cart");}if(a==="category"){currentCategory=b.dataset.category;renderProducts();}if(a==="add"){add(id);b.textContent="Добавлено ✓";}if(a==="plus"){let x=cart.find(z=>z.id===id);if(x)x.qty++;save();renderCart();}if(a==="minus"){let x=cart.find(z=>z.id===id);if(x)x.qty--;cart=cart.filter(z=>z.qty>0);save();renderCart();}if(a==="remove"){cart=cart.filter(z=>z.id!==id);save();renderCart();}if(a==="clear"){cart=[];save();renderCart();}if(a==="checkout")checkout();});
-renderProducts();renderCount();
+document.addEventListener("click",e=>{
+const b=e.target.closest("[data-action]");
+if(!b)return;
+const a=b.dataset.action,id=Number(b.dataset.id);
+if(a==="home")showPage("home");
+if(a==="cart"){renderCart();showPage("cart");}
+if(a==="category"){currentCategory=b.dataset.category;renderProducts();}
+if(a==="add"){add(id);b.textContent="Добавлено ✓";}
+if(a==="plus"){let x=cart.find(z=>z.id===id);if(x)x.qty++;save();renderCart();}
+if(a==="minus"){let x=cart.find(z=>z.id===id);if(x)x.qty--;cart=cart.filter(z=>z.qty>0);save();renderCart();}
+if(a==="remove"){cart=cart.filter(z=>z.id!==id);save();renderCart();}
+if(a==="clear"){cart=[];save();renderCart();}
+if(a==="checkout")checkout();
+});
+renderProducts();
+renderCount();
 </script>
-</body></html>
+</body>
+  </html>
+  
